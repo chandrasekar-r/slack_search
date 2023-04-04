@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Slack Channel Search</title>
+</head>
+<body>
+    <h1>Search
+    <h1>Slack Channel Search</h1>
+    <form action="/search" method="post" id="search-form">
+        <input type="text" name="query" id="query" placeholder="Search...">
+        <button type="submit">Search</button>
+    </form>
+
+    <div id="results"></div>
+
+    <script>
+        document.getElementById('search-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const query = document.getElementById('query').value;
+            const response = await fetch('/search', {
+                method: 'POST',
+                body: new FormData(event.target),
+                headers: {
+                    'Accept': 'application/json',
+                },
+            });
+
+            const results = await response.json();
+            const resultsContainer = document.getElementById('results');
+            resultsContainer.innerHTML = '';
+
+            results.forEach(result => {
+                const resultElement = document.createElement('div');
+                resultElement.innerHTML = `
+                    <h3>${result._source.question}</h3>
+                    <p>${result._source.answer}</p>
+                    <small>Posted by ${result._source.user} on ${result._source.timestamp}</small>
+                `;
+                resultsContainer.appendChild(resultElement);
+            });
+        });
+    </script>
+</body>
+</html>
+

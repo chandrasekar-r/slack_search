@@ -1,0 +1,6 @@
+Flask
+slack-sdk
+slack-bolt
+requests
+Elasticsearch
+Jinja2
